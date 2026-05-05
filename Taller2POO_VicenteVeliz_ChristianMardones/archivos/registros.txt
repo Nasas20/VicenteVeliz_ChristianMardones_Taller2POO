@@ -1,0 +1,9 @@
+MaximilianoCastillo;3
+Mawile;Vivo
+Groudon;Debilitado
+Charizard;Vivo
+Pikachu;Debilitado
+Blastoise;Vivo
+Lucario;Vivo
+Mewtwo;Debilitado
+Snorlax;Vivo
