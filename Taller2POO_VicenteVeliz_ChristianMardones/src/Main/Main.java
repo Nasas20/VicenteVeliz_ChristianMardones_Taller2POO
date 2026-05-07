@@ -1,4 +1,5 @@
 package Main;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -29,25 +30,181 @@ public class Main {
 	private static void mostrarMenuInicio() throws FileNotFoundException {
 		Scanner scanner = new Scanner(System.in);
 
-        System.out.println("¡Bienvenido al juego de Pokémon!");
-        System.out.println("1) Continuar");
-        System.out.println("2) Nueva Partida");
-        System.out.println("3) Salir");
+       
+        boolean verInicio = true;
+        
+        while (verInicio) {
+        	
+    	    System.out.println("¡Bienvenido al juego de Pokémon!");
+            System.out.println("1) Continuar");
+            System.out.println("2) Nueva Partida");
+            System.out.println("3) Salir");
 
-        System.out.print("Elige una opción: ");
-        int opcion = scanner.nextInt();
+            System.out.print("Elige una opción: ");
+        	int opcion = scanner.nextInt();
 
-       switch (opcion) {
-       		case 1:
-       			leerRegistros();
-				mostrarMenuJugador();
-       			
-       		case 2:
-       			System.out.println("dou");
-       	
-       }
+            switch (opcion) {
+         		case 1:
+         			Jugador jugador = leerRegistros();
+      				mostrarMenuJugador(jugador);
+      				break;
+             			
+         		case 2:
+         			System.out.println("dou");
+         			nuevoProgreso();
+         			break;
+             			
+     			default:
+     				System.out.println("corre");
+     				break;
+             	
+             }
+        }
+        
+       
 		
 	}
+	
+	
+	
+	public static void salirACapturar(Jugador jugador) {
+	    Scanner scanner = new Scanner(System.in);
+
+	    System.out.println("Dónde deseas ir a explorar");
+	    System.out.println("Zonas disponibles:");
+	    System.out.println("1) Lago");
+	    System.out.println("2) Cueva");
+	    System.out.println("3) Montaña");
+	    System.out.println("4) Bosque");
+	    System.out.println("5) Prado");
+	    System.out.println("6) Mar");
+	    System.out.println("7) Volver al menú");
+
+	    System.out.print("\nElige una zona: ");
+	    int zona = scanner.nextInt();
+
+	    switch (zona) {
+	        case 1:
+	            capturarPokemonEnZona(jugador, "Lago");
+	            break;
+	        case 2:
+	            capturarPokemonEnZona(jugador, "Cueva");
+	            break;
+	        case 3:
+	            capturarPokemonEnZona(jugador, "Montaña");
+	            break;
+	        case 4:
+	            capturarPokemonEnZona(jugador, "Bosque");
+	            break;
+	        case 5:
+	            capturarPokemonEnZona(jugador, "Prado");
+	            break;
+	        case 6:
+	            capturarPokemonEnZona(jugador, "Mar");
+	            break;
+	        case 7:
+	            System.out.println("Volviendo al menú...");
+	            mostrarMenuJugador(jugador); 
+	            break;
+	        default:
+	            System.out.println("Opción no válida.");
+	            break;
+	    }
+	}
+	
+	public static void capturarPokemonEnZona(Jugador jugador, String zona) {
+	    System.out.println("Explorando la zona de: " + zona);
+
+	    Pokemon pokemonCapturado = capturarPokemonPorZona(zona);
+	    
+	    if (pokemonCapturado != null) {
+	        System.out.println("aparecio un " + pokemonCapturado.getNombrePokemon() );
+	        
+	        System.out.println("¿Qué deseas hacer?");
+	        System.out.println("1) Capturar");
+	        System.out.println("2) Huir");
+
+	        System.out.print("\nElige una opción: ");
+	        Scanner scanner = new Scanner(System.in);
+	        int opcion = scanner.nextInt();
+
+	        if (opcion == 1) {
+	            if (jugador.getPokemones().contains(pokemonCapturado)) {
+	                System.out.println("Este Pokémon ya está en tu equipo");
+	            } else {
+	                jugador.agregarPokemones(pokemonCapturado);
+	                System.out.println(pokemonCapturado.getNombrePokemon() + " se agrego al equipo");
+	            }
+	        } else if (opcion == 2) {
+	            System.out.println("Has huido de la batalla.");
+	        } else {
+	            System.out.println("Opción no válida. Has huido de la batalla.");
+	        }
+	    } else {
+	        System.out.println("No lograste capturar ningún Pokémon en esta zona.");
+	    }
+	}
+	
+	public static Pokemon capturarPokemonPorZona(String zona) {
+	    ArrayList<Pokemon> pokemonsPorZona = new ArrayList<>();
+
+	    for (Pokemon p : pokedex) {
+	        if (p.getHabitat().equalsIgnoreCase(zona)) {
+	            pokemonsPorZona.add(p);
+	        }
+	    }
+
+	    if (pokemonsPorZona.isEmpty()) {
+	        System.out.println("No hay Pokémon en esta zona.");
+	        return null;
+	    }
+
+	    int index = (int) (Math.random() * pokemonsPorZona.size());
+	    Pokemon pokemonSeleccionado = pokemonsPorZona.get(index);
+
+	    double probabilidad = Math.random();
+	    if (probabilidad <= pokemonSeleccionado.getAparicion()) {
+	        return pokemonSeleccionado;  
+	    } else {
+	        return null;  
+	    }
+	}
+	
+	
+	public static void nuevoProgreso() {
+		Scanner scan = new Scanner(System.in);
+	    System.out.print("Ingresa tu nombre de jugador: ");
+	    String nombreJugador = scan.nextLine();
+	    
+	    Jugador nuevoJugador = new Jugador(nombreJugador, 0);
+	    
+	    guardarProgreso(nuevoJugador);
+	    
+	    System.out.println("Bienvenido " + nombreJugador);
+	    mostrarMenuJugador(nuevoJugador);
+
+	}
+	
+	public static void guardarProgreso(Jugador jugador) {
+		try {
+	        BufferedWriter writer = new BufferedWriter(new FileWriter("archivos/registros.txt", false));
+	        writer.write(jugador.getNombreCuenta() + ";" + jugador.getCantMedallas());
+	        writer.newLine();
+	        
+	        for (Pokemon p : jugador.getPokemones()) {
+	            writer.write(p.getNombrePokemon() + ";" + p.getEstado());  
+	            writer.newLine();
+	        }
+	        
+	        writer.close();
+	        
+	        System.out.println("Progreso guardado exitosamente.");
+	    } catch (IOException e) {
+	        System.out.println("Error al guardar el progreso: " + e.getMessage());
+	    }
+	}
+	
+
 
 	public static void leerAltoMando() throws FileNotFoundException {
 	    File arch = new File("archivos/altosmandos.txt");
@@ -79,41 +236,68 @@ public class Main {
 	    scan.close();
 	}
 	
-	public static void mostrarMenuJugador() {
+	public static void mostrarMenuJugador(Jugador j) {
 		Scanner scanner = new Scanner(System.in);
+		boolean ver = true;
+		
+		while (ver) {
+			
+			 System.out.println("Menu de opciones:");
+		     System.out.println("1) Revisar equipo");
+		     System.out.println("2) Salir a capturar");
+		     System.out.println("3) Acceder al PC (cambiar Pokémon)");
+	         System.out.println("4) Retar un gimnasio");
+	         System.out.println("5) Desafío al Alto Mando");
+	         System.out.println("6) Curar Pokémon");
+	         System.out.println("7) Guardar");
+	         System.out.println("8) Guardar y Salir");
 
-        System.out.println("Menu de opciones:");
-        System.out.println("1) Revisar equipo");
-        System.out.println("2) Salir a capturar");
-        System.out.println("3) Acceder al PC (cambiar Pokémon)");
-        System.out.println("4) Retar un gimnasio");
-        System.out.println("5) Desafío al Alto Mando");
-        System.out.println("6) Curar Pokémon");
-        System.out.println("7) Guardar");
-        System.out.println("8) Guardar y Salir");
+	         System.out.print("Elige una opción: ");
+	         int opcion = scanner.nextInt();
+		        
+	         switch (opcion) {
+	        	case 1:
+	        		System.out.println("mostrando equipo");
+	        		j.mostrarEquipo();
+	        		
+	        		break;
+	        	case 2:
+	        		System.out.println("eligiendo zona");
+	        		salirACapturar(j);
+	        		break;
+	        	case 3:
+	        		System.out.println("accediendo al pc");
+	        		break;
+	        	case 4:
+	        		System.out.println("desafiando un gimnasio"); 
+	        		break;
+	        	case 5:
+	        		System.out.println("desafiando alto mando");
+	        		break;
+	        	case 6:
+	        		System.out.println("curando pokemones");
+	        		break;
+	        	case 7:
+	        		System.out.println("guardando progreso");
+	        		break;
+	        	case 8:
+	        		System.out.println("guardando progreso y saliendo");
+	        		ver = false;
+	        		break;
+	        		
+	        		
+	    		default: 
+	    			System.out.println("opcion invalida");
+	                mostrarMenuJugador(j);
+	                break;
 
-        System.out.print("Elige una opción: ");
-        int opcion = scanner.nextInt();
-        System.out.println("llego");
-        
-        switch (opcion) {
-        	case 1:
-        		System.out.println("dou");
-        	case 2:
-        	case 3:
-        	case 4:
-        	case 5:
-        	case 6:
-        	case 7:
-        	case 8:
-        		
-    		default: 
-    			System.out.println("opcion invalida");
-                mostrarMenuJugador();
-                break;
+	        	
+	        }
+		}
+		
+		
 
-        	
-        }
+       
 
 	}
 	
@@ -151,7 +335,7 @@ public class Main {
 		}
 	}
 	
-	public static void leerRegistros() throws FileNotFoundException {
+	public static Jugador leerRegistros() throws FileNotFoundException {
 		File arch = new File("archivos/registros.txt");
 		Scanner scan = new Scanner(arch);
 		String primera = scan.nextLine();
@@ -186,6 +370,8 @@ public class Main {
 			
 		}
 		scan.close();
+		return j;
+		
 		
 	}
 	
