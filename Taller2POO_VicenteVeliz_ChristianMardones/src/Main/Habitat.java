@@ -9,4 +9,10 @@ public class Habitat {
 		// TODO Auto-generated constructor stub
 	}
 
+	public String getNombre() {
+		return nombre;
+	}
+	
+	
+
 }
