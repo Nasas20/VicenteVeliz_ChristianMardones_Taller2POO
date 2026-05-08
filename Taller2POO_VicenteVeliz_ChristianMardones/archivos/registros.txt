@@ -1,8 +1,4 @@
-Guadalupe;0
-Staraptor;Vivo
+Chente;EmmaLaArdillaRabiosa;
+Trevenant;Vivo
 Steelix;Vivo
-Mawile;Vivo
-Ekans;Vivo
-Meganium;Vivo
-Milotic;Vivo
-Gigalith;pc
+Lucario;Vivo

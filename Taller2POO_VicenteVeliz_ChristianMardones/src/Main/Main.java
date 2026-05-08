@@ -21,7 +21,6 @@ public class Main {
         leerHabitat();
         leerGimnasios();
         leerAltoMando();
-        
         mostrarMenuInicio();
 
 
@@ -177,8 +176,9 @@ public class Main {
 		Scanner scan = new Scanner(System.in);
 	    System.out.print("Ingresa tu nombre de jugador: ");
 	    String nombreJugador = scan.nextLine();
+	    String[] medallas = new String[8];
 	    
-	    Jugador nuevoJugador = new Jugador(nombreJugador, 0);
+	    Jugador nuevoJugador = new Jugador(nombreJugador, medallas);
 	    
 	    guardarProgreso(nuevoJugador);
 	    
@@ -241,6 +241,7 @@ public class Main {
 	public static void mostrarMenuJugador(Jugador j) {
 		Scanner scanner = new Scanner(System.in);
 		boolean ver = true;
+		reescribirGimnasio(j);
 		
 		while (ver) {
 			
@@ -272,13 +273,14 @@ public class Main {
 	        		j.accederPC();
 	        		break;
 	        	case 4:
-	        		System.out.println("desafiando un gimnasio"); 
+	        		retarGimnasio(j);
+	        		
 	        		break;
 	        	case 5:
 	        		System.out.println("desafiando alto mando");
 	        		break;
 	        	case 6:
-	        		System.out.println("curando pokemones");
+	        		j.curarPokemones();
 	        		break;
 	        	case 7:
 	        		System.out.println("guardando progreso");
@@ -346,7 +348,22 @@ public class Main {
 		String primera = scan.nextLine();
 		String[] user = primera.split(";");
 		String nombre = user[0];
-		int medallas = Integer.valueOf(user[1]);
+		String[] medallas = new String[8];
+		
+		
+		if (user.length > 0) {
+			medallas = new String[8];
+			int contadorMedallas = 0;
+			int contadorFor = 0;
+			for (String a : user) {
+				if (contadorFor == 0) {
+					contadorFor++;
+				} else {
+					medallas[contadorMedallas] = a;
+					contadorMedallas++;
+				}
+			}
+		}
 		
 		Jugador j = new Jugador(nombre, medallas);
 
@@ -419,5 +436,90 @@ public class Main {
 		}	
 		scan.close();
 	}
-
+	
+	public static void retarGimnasio(Jugador j) {
+		int eleccion = 0;
+		Scanner input = new Scanner(System.in);
+		
+		System.out.println();
+		for (Gimnasio g : gimnasios) {
+			g.mostrarGimnasio();
+		}
+		
+		System.out.println("9) salir al menu.");
+		System.out.println();
+		System.out.print("A que lider desea retar?: ");
+		eleccion = input.nextInt();
+		
+		//Agregar control de error aqui
+		
+		Gimnasio liderADesafiar = null;
+		
+		
+		if (eleccion == 9) {
+			return;
+		}
+		else if (eleccion == 1 ) {
+			liderADesafiar = gimnasios.get(0);
+			if (j.combateGimnasio(liderADesafiar)) { //Entra aqui en caso de ganar
+				int indexLider = gimnasios.indexOf(liderADesafiar);
+				
+				if (liderADesafiar.getEstado().equals("Sin derrotar")) { //Añadirle una medalla al jugador en caso de que el gimnasio no se haya derrotado previamente
+					j.agregarMedallas(gimnasios.get(0).getLider());
+				}
+				
+				
+				liderADesafiar.setEstado("Derrotado");
+				gimnasios.set(indexLider, liderADesafiar);
+			} else {
+				
+			}
+		} else {
+			int contadorLider = 2;
+			boolean puedeContinuar = false;
+			
+			for (Gimnasio g : gimnasios) {
+				if (g.getEstado().equals("Derrotado")) {
+					puedeContinuar = true;
+				}
+				
+				if (!puedeContinuar) {
+					System.out.println("Debes derrotar a los demas gimnasios primero!");
+					break;
+				}
+				else {
+					puedeContinuar = false;
+				}
+				
+				if (contadorLider == eleccion) {
+					liderADesafiar = gimnasios.get(eleccion-1);
+					if (j.combateGimnasio(liderADesafiar)) { //Entra aqui en caso de ganar
+						int indexLider = gimnasios.indexOf(liderADesafiar);
+						
+						if (liderADesafiar.getEstado().equals("Sin derrotar")) { //Añadirle una medalla al jugador en caso de que el gimnasio no se haya derrotado previamente
+							j.agregarMedallas(gimnasios.get(indexLider).getLider());
+						}
+						
+						liderADesafiar.setEstado("Derrotado");
+						gimnasios.set(indexLider, liderADesafiar);
+					} else {
+						
+					}
+				}
+			}
+		}
+	}
+	public static void reescribirGimnasio(Jugador j) {
+		for (Gimnasio g : gimnasios) {
+			for (String b : j.getCantMedallasLista()) {
+				if (!(b == null)) {
+					if (b.equals(g.getLider())) {
+						int index = gimnasios.indexOf(g);
+						g.setEstado("Derrotado");
+						gimnasios.set(index, g);
+					}
+				}
+			}
+		}
+	}
 }

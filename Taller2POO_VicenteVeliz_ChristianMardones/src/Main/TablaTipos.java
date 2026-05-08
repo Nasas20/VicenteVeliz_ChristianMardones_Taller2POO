@@ -22,4 +22,63 @@ public class TablaTipos {
     {  1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.5, 1.0, 1.0, 1.0, 2.0, 1.0, 1.0, 2.0, 1.0, 1.0, 0.5, 0.5 }, // SINIESTRO
     {  1.0, 0.5, 1.0, 1.0, 1.0, 1.0, 2.0, 0.5, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 2.0, 0.5, 2.0, 1.0 }  // HADA
 };
+
+	public static double[][] getEfectividad() {
+		return EFECTIVIDAD;
+	}
+	
+	public static int retornarPosicionTipo(String tipo) {
+		if (tipo == "Normal") {
+			return 0;
+		}
+		else if (tipo.equals("Fuego")) {
+			return 1;
+		}
+		else if (tipo.equals("Agua")) {
+			return 2;
+		}
+		else if (tipo.equals("Planta")) {
+			return 3;
+		}
+		else if (tipo.equals("Electrico")) {
+			return 4;
+		}
+		else if (tipo.equals("Hielo")) {
+			return 5;
+		}
+		else if (tipo.equals("Veneno")) {
+			return 6;
+		}
+		else if (tipo.equals("Tierra")) {
+			return 7;
+		}
+		else if (tipo.equals("Volador")) {
+			return 8;
+		}
+		else if (tipo.equals("Psiquico")) {
+			return 9;
+		}
+		else if (tipo.equals("Bicho")) {
+			return 10;
+		}
+		else if (tipo.equals("Roca")) {
+			return 11;
+		}
+		else if (tipo.equals("Fantasma")) {
+			return 12;
+		}
+		else if (tipo.equals("Dragon")) {
+			return 13;
+		}
+		else if (tipo.equals("Acero")) {
+			return 14;
+		}
+		else if (tipo.equals("Siniestro")) {
+			return 15;
+		}
+		else {
+			return 16;
+		}
+		
+	}
 }

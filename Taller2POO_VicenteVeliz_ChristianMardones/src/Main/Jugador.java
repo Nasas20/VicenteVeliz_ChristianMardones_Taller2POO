@@ -6,12 +6,12 @@ import java.util.Scanner;
 
 public class Jugador {
 	private String nombreCuenta;
-	private int cantMedallas;
+	private String[] cantMedallas;
 	private ArrayList<Pokemon> pokemones = new ArrayList<>();
 	private ArrayList<Pokemon> pc = new ArrayList<>();
 	
 	
-	public Jugador(String nombreCuenta, int cantMedallas) {
+	public Jugador(String nombreCuenta, String[] cantMedallas) {
 		this.nombreCuenta = nombreCuenta;
 		this.cantMedallas = cantMedallas;
 	}
@@ -37,10 +37,20 @@ public class Jugador {
 	}
 
 
-	public int getCantMedallas() {
-		return cantMedallas;
+	public String getCantMedallas() {
+		String medallas = "";
+		for (String a : cantMedallas) {
+			if (!(a == null)) {
+				medallas +=a + ";";
+			}
+		}
+		
+		return medallas;
 	}
-
+	
+	public String[] getCantMedallasLista() {
+		return this.cantMedallas;
+	}
 
 	public ArrayList<Pokemon> getPokemonesEquipo() {
 		return pokemones;
@@ -146,5 +156,171 @@ public class Jugador {
 			}
 		}
 	}
+	
+	public Pokemon combate(Pokemon pokemonJugador, Pokemon pokemonEnemigo) {
+		String tipoJugador = pokemonJugador.getTipo();
+		String tipoEnemigo = pokemonEnemigo.getTipo();
+		
+		double[][] tablaTipos = TablaTipos.getEfectividad();
+		
+		int posicionJugador = TablaTipos.retornarPosicionTipo(tipoJugador);
+		int posicionEnemigo = TablaTipos.retornarPosicionTipo(tipoEnemigo);
+		
+		//Printear combate
+		System.out.println(pokemonJugador.getNombrePokemon() + "-> " + pokemonJugador.getEstadisticas() + " puntos");
+		System.out.println(pokemonEnemigo.getNombrePokemon() + "-> " + pokemonEnemigo.getEstadisticas() + " puntos");
+		
+		//Calcuar estadisticas ATCANTE
+		if (tablaTipos[posicionJugador][posicionEnemigo] == 1.0) {
+			System.out.println("neutral");
+			if (pokemonJugador.getEstadisticas() >= pokemonEnemigo.getEstadisticas()) {
+				System.out.println("Ha ganado " + pokemonJugador.getNombrePokemon() + "! " + pokemonEnemigo.getNombrePokemon() + " ha sido derrotado...");
+				return pokemonJugador;
+			}
+			else {
+				System.out.println("Ha ganado " + pokemonEnemigo.getNombrePokemon() + "! " + pokemonJugador.getNombrePokemon() + " ha sido derrotado...");
+				return pokemonEnemigo;
+			}
+		} else if (tablaTipos[posicionJugador][posicionEnemigo] == 2.0) {
+			System.out.println("efectivo");
+			if (pokemonJugador.getEstadisticas()*2 >= pokemonEnemigo.getEstadisticas()) {
+				System.out.println("Ha ganado " + pokemonJugador.getNombrePokemon() + "! " + pokemonEnemigo.getNombrePokemon() + " ha sido derrotado...");
+				
+				return pokemonJugador;
+			}
+			else {
+				System.out.println("Ha ganado " + pokemonEnemigo.getNombrePokemon() + "! " + pokemonJugador.getNombrePokemon() + " ha sido derrotado...");
+				return pokemonEnemigo;
+			}
+		} else {
+			if (pokemonJugador.getEstadisticas()*0.5 >= pokemonEnemigo.getEstadisticas()) {
+				System.out.println("Ha ganado " + pokemonJugador.getNombrePokemon() + "! " + pokemonEnemigo.getNombrePokemon() + " ha sido derrotado...");
+				return pokemonJugador;
+			}
+			else {
+				System.out.println("Ha ganado " + pokemonEnemigo.getNombrePokemon() + "! " + pokemonJugador.getNombrePokemon() + " ha sido derrotado...");
+				return pokemonEnemigo;
+			}
+		}
+	}
+	
+	public boolean combateGimnasio(Gimnasio lider) {
+		ArrayList<Pokemon> liderGimnasio = lider.getPokemons();
+		boolean seguirViendo = true;
+		int eleccion = 0;
+		int pokemonActual = 0;
+		Pokemon pokemonActualLider = null;
+		Scanner input = new Scanner(System.in);
+		
+		System.out.println("Desafiando a " + lider.getLider() + "!!");
+		
+		while (seguirViendo) {
+			for (Pokemon p : liderGimnasio) {
+				if (p.getEstado().equals("Vivo")) {
+					pokemonActualLider = p;
+				}
+			}
+			
+			if (pokemonActualLider == null) {
+				System.out.println("Has ganado a " + lider.getLider() + "!");
+				return true;
+			}
+			
+			
+			System.out.println(lider.getLider() + " saca a " + pokemonActualLider.getNombrePokemon() + "!");
+			System.out.println(getNombreCuenta() + " saca a " + pokemones.get(pokemonActual).getNombrePokemon() + "!");
+			
+			
+			System.out.print("Que deseas hacer?\r\n"
+					+ "1) Atacar\r\n"
+					+ "2) Cambiar de pokemon\r\n"
+					+ "3) Rendirse\r\n"
+					+ "Ingrese Opcion:");
+			eleccion = input.nextInt();
+			
+			//Agregar control de error aca
+			
+			switch (eleccion) {
+			case 1:
+				Pokemon pokemonGanador = combate(pokemones.get(pokemonActual), pokemonActualLider);
+				
+				if (pokemonGanador.equals(pokemones.get(pokemonActual))) {
+					int indexPokemonLider = liderGimnasio.indexOf(pokemonActualLider);
+					pokemonActualLider.setEstado("Derrotado");
+					liderGimnasio.set(indexPokemonLider, pokemonActualLider);
+					pokemonActualLider = null;
+				} else {
+					Pokemon pokemonEntrenador = pokemones.get(pokemonActual);
+					pokemonEntrenador.setEstado("Derrotado");
+					pokemones.set(pokemonActual, pokemonEntrenador);
+					
+					int contadorVivos = 0;
+					
+					for (Pokemon p : pokemones) {
+						if (p.getEstado().equals("Vivo")) {
+							contadorVivos++;
+						}
+					}
+					
+					if (contadorVivos > 0) {
+						for (Pokemon p : pokemones) {
+							if (p.getEstado().equals("Vivo")) {
+								pokemonActual = pokemones.indexOf(p);
+							}
+						}
+					} else {
+						System.out.println("Te has quedado sin pokemones en tu equipo!");
+						System.out.println("Volviendo al menu...");
+						return false;
+					}
+					
+				}
+				
+				break;
+			
+			case 2:
+				mostrarEquipo();
+				System.out.print("¿A que pokemon quieres cambiar?: ");
+				pokemonActual = input.nextInt()-1;
+				//Agregar control de error aqui.
+				
+				break;
+			
+			case 3:
+				System.out.println("Te has rendido, por lo que " + lider.getLider() + " ha ganado el combate.");
+				System.out.println("Volviendo al menu...");
+				return false;
 
+			default:
+				break;
+			}
+			
+		}
+		return false;
+	}
+
+
+	public void agregarMedallas(String lider) {
+		int contador = 0;
+		for (String a : cantMedallas) {
+			if (!(a == null)) {
+				contador++;
+			}
+		}
+		
+		cantMedallas[contador] = lider;
+		
+	}
+	
+	public void curarPokemones() {
+		for (Pokemon p : pokemones) {
+			if (p.getEstado().equals("Derrotado")) {
+				int index = pokemones.indexOf(p);
+				p.setEstado("Vivo");
+				pokemones.set(index, p);
+			}
+		}
+		System.out.println("¡Pokemones curados!");
+	}
+	
 }
