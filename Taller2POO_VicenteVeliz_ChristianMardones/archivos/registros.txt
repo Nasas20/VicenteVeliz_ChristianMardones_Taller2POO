@@ -1,9 +1,8 @@
-MaximilianoCastillo;3
+Guadalupe;0
+Staraptor;Vivo
+Steelix;Vivo
 Mawile;Vivo
-Groudon;Debilitado
-Charizard;Vivo
-Pikachu;Debilitado
-Blastoise;Vivo
-Lucario;Vivo
-Mewtwo;Debilitado
-Snorlax;Vivo
+Ekans;Vivo
+Meganium;Vivo
+Milotic;Vivo
+Gigalith;pc

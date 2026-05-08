@@ -129,12 +129,14 @@ public class Main {
 	        int opcion = scanner.nextInt();
 
 	        if (opcion == 1) {
-	            if (jugador.getPokemones().contains(pokemonCapturado)) {
-	                System.out.println("Este Pokémon ya está en tu equipo");
-	            } else {
-	                jugador.agregarPokemones(pokemonCapturado);
-	                System.out.println(pokemonCapturado.getNombrePokemon() + " se agrego al equipo");
-	            }
+	        	
+	        	if (jugador.getPokemonesEquipo().contains(pokemonCapturado)) {
+	        		System.out.println("Ya posees a este pokemon!");
+	        	}
+	        	else {
+	        		jugador.agregarPokemones(pokemonCapturado);
+	        	}
+	        	
 	        } else if (opcion == 2) {
 	            System.out.println("Has huido de la batalla.");
 	        } else {
@@ -191,7 +193,7 @@ public class Main {
 	        writer.write(jugador.getNombreCuenta() + ";" + jugador.getCantMedallas());
 	        writer.newLine();
 	        
-	        for (Pokemon p : jugador.getPokemones()) {
+	        for (Pokemon p : jugador.getPokemonesGeneral()) {
 	            writer.write(p.getNombrePokemon() + ";" + p.getEstado());  
 	            writer.newLine();
 	        }
@@ -242,7 +244,8 @@ public class Main {
 		
 		while (ver) {
 			
-			 System.out.println("Menu de opciones:");
+			System.out.println(j.getNombreCuenta() + ", que desea hacer?");
+			System.out.println();
 		     System.out.println("1) Revisar equipo");
 		     System.out.println("2) Salir a capturar");
 		     System.out.println("3) Acceder al PC (cambiar Pokémon)");
@@ -266,7 +269,7 @@ public class Main {
 	        		salirACapturar(j);
 	        		break;
 	        	case 3:
-	        		System.out.println("accediendo al pc");
+	        		j.accederPC();
 	        		break;
 	        	case 4:
 	        		System.out.println("desafiando un gimnasio"); 
@@ -279,9 +282,11 @@ public class Main {
 	        		break;
 	        	case 7:
 	        		System.out.println("guardando progreso");
+	        		guardarProgreso(j);
 	        		break;
 	        	case 8:
 	        		System.out.println("guardando progreso y saliendo");
+	        		guardarProgreso(j);
 	        		ver = false;
 	        		break;
 	        		
