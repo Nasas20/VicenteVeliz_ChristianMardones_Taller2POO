@@ -178,10 +178,7 @@ public class Main {
 	        }
 	    }
 
-	    if (pokemonsPorZona.isEmpty()) {
-	        System.out.println("No hay Pokémon en esta zona.");
-	        return null;
-	    }
+	    
 
 	    int index = (int) (Math.random() * pokemonsPorZona.size());
 	    Pokemon pokemonSeleccionado = pokemonsPorZona.get(index);
@@ -190,7 +187,7 @@ public class Main {
 	    if (probabilidad <= pokemonSeleccionado.getAparicion()) {
 	        return pokemonSeleccionado;  
 	    } else {
-	        return null;  
+	        return pokemonSeleccionado;  
 	    }
 	}
 	
