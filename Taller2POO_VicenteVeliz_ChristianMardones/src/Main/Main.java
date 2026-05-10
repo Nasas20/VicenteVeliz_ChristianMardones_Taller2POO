@@ -29,18 +29,25 @@ public class Main {
 	private static void mostrarMenuInicio() throws FileNotFoundException {
 		Scanner scanner = new Scanner(System.in);
 
-       
         boolean verInicio = true;
         
         while (verInicio) {
-        	
+        	System.out.println();
     	    System.out.println("¡Bienvenido al juego de Pokémon!");
             System.out.println("1) Continuar");
             System.out.println("2) Nueva Partida");
             System.out.println("3) Salir");
 
             System.out.print("Elige una opción: ");
-        	int opcion = scanner.nextInt();
+        	int opcion = -1;
+        	
+        	try {
+        		opcion = scanner.nextInt();
+			} catch (Exception e) {
+				System.out.println("Ponga un valor valido!");
+				System.out.println();
+				scanner.nextLine();
+			}
 
             switch (opcion) {
          		case 1:
@@ -52,23 +59,23 @@ public class Main {
          			System.out.println("dou");
          			nuevoProgreso();
          			break;
-             			
-     			default:
-     				System.out.println("corre");
-     				break;
              	
+         		case 3:
+         			verInicio = false;
+         			break;
+         			
+     			default:
+     				System.out.println("Elige una opcion valida.");
+     				break;
              }
         }
-        
-       
-		
 	}
 	
 	
 	
 	public static void salirACapturar(Jugador jugador) {
 	    Scanner scanner = new Scanner(System.in);
-
+	    System.out.println();
 	    System.out.println("Dónde deseas ir a explorar");
 	    System.out.println("Zonas disponibles:");
 	    System.out.println("1) Lago");
@@ -80,7 +87,14 @@ public class Main {
 	    System.out.println("7) Volver al menú");
 
 	    System.out.print("\nElige una zona: ");
-	    int zona = scanner.nextInt();
+	    int zona = 8;
+	    
+	    try {
+    		zona = scanner.nextInt();
+		} catch (Exception e) {
+			System.out.println();
+			scanner.nextLine();
+		}
 
 	    switch (zona) {
 	        case 1:
@@ -112,7 +126,8 @@ public class Main {
 	}
 	
 	public static void capturarPokemonEnZona(Jugador jugador, String zona) {
-	    System.out.println("Explorando la zona de: " + zona);
+	    System.out.println();
+		System.out.println("Explorando la zona de: " + zona);
 
 	    Pokemon pokemonCapturado = capturarPokemonPorZona(zona);
 	    
@@ -125,7 +140,14 @@ public class Main {
 
 	        System.out.print("\nElige una opción: ");
 	        Scanner scanner = new Scanner(System.in);
-	        int opcion = scanner.nextInt();
+	        int opcion = 0;
+	        
+	        try {
+        		opcion = scanner.nextInt();
+			} catch (Exception e) {
+				System.out.println();
+				scanner.nextLine();
+			}
 
 	        if (opcion == 1) {
 	        	
@@ -134,6 +156,7 @@ public class Main {
 	        	}
 	        	else {
 	        		jugador.agregarPokemones(pokemonCapturado);
+	        		System.out.println("¡Pokemon capturado!");
 	        	}
 	        	
 	        } else if (opcion == 2) {
@@ -244,7 +267,7 @@ public class Main {
 		reescribirGimnasio(j);
 		
 		while (ver) {
-			
+			System.out.println();
 			System.out.println(j.getNombreCuenta() + ", que desea hacer?");
 			System.out.println();
 		     System.out.println("1) Revisar equipo");
@@ -257,19 +280,26 @@ public class Main {
 	         System.out.println("8) Guardar y Salir");
 
 	         System.out.print("Elige una opción: ");
-	         int opcion = scanner.nextInt();
+	         int opcion = -1;
+	         
+	         try {
+	        		opcion = scanner.nextInt();
+				} catch (Exception e) {
+					System.out.println();
+					scanner.nextLine();
+				}
 		        
 	         switch (opcion) {
 	        	case 1:
-	        		System.out.println("mostrando equipo");
+	        		System.out.println();
 	        		j.mostrarEquipo();
 	        		
 	        		break;
 	        	case 2:
-	        		System.out.println("eligiendo zona");
 	        		salirACapturar(j);
 	        		break;
 	        	case 3:
+	        		System.out.println();
 	        		j.accederPC();
 	        		break;
 	        	case 4:
@@ -277,38 +307,26 @@ public class Main {
 	        		
 	        		break;
 	        	case 5:
-	        		System.out.println("desafiando alto mando");
+	        		retarAltoMando(j);
 	        		break;
 	        	case 6:
 	        		j.curarPokemones();
 	        		break;
 	        	case 7:
-	        		System.out.println("guardando progreso");
 	        		guardarProgreso(j);
 	        		break;
 	        	case 8:
-	        		System.out.println("guardando progreso y saliendo");
 	        		guardarProgreso(j);
 	        		ver = false;
 	        		break;
 	        		
-	        		
 	    		default: 
-	    			System.out.println("opcion invalida");
+	    			System.out.println("Opcion invalida");
 	                mostrarMenuJugador(j);
 	                break;
-
-	        	
 	        }
 		}
-		
-		
-
-       
-
 	}
-	
-	
 	
 	public static void leerGimnasios() throws FileNotFoundException {
 		File arch = new File("archivos/gimnasios.txt");
@@ -438,77 +456,96 @@ public class Main {
 	}
 	
 	public static void retarGimnasio(Jugador j) {
-		int eleccion = 0;
-		Scanner input = new Scanner(System.in);
-		
-		System.out.println();
-		for (Gimnasio g : gimnasios) {
-			g.mostrarGimnasio();
-		}
-		
-		System.out.println("9) salir al menu.");
-		System.out.println();
-		System.out.print("A que lider desea retar?: ");
-		eleccion = input.nextInt();
-		
-		//Agregar control de error aqui
-		
-		Gimnasio liderADesafiar = null;
-		
-		
-		if (eleccion == 9) {
-			return;
-		}
-		else if (eleccion == 1 ) {
-			liderADesafiar = gimnasios.get(0);
-			if (j.combateGimnasio(liderADesafiar)) { //Entra aqui en caso de ganar
-				int indexLider = gimnasios.indexOf(liderADesafiar);
-				
-				if (liderADesafiar.getEstado().equals("Sin derrotar")) { //Añadirle una medalla al jugador en caso de que el gimnasio no se haya derrotado previamente
-					j.agregarMedallas(gimnasios.get(0).getLider());
-				}
-				
-				
-				liderADesafiar.setEstado("Derrotado");
-				gimnasios.set(indexLider, liderADesafiar);
-			} else {
-				
-			}
+		if (!j.chequearPokemonVivo()) {
+			System.out.println("¡Cura a tus pokemones antes de enfrentrar gimnasios!");
+			System.out.println();
 		} else {
-			int contadorLider = 2;
-			boolean puedeContinuar = false;
+			int eleccion = 0;
+			Scanner input = new Scanner(System.in);
 			
+			System.out.println();
 			for (Gimnasio g : gimnasios) {
-				if (g.getEstado().equals("Derrotado")) {
-					puedeContinuar = true;
+				System.out.println();
+				g.mostrarGimnasio();
+			}
+			
+			System.out.println();
+			System.out.println("9) salir al menu.");
+			System.out.println();
+			System.out.print("A que lider desea retar?: ");
+			eleccion = 0;
+			
+			try {
+        		eleccion = input.nextInt();
+			} catch (Exception e) {
+				System.out.println("Ponga un valor valido!");
+				System.out.println();
+				input.nextLine();
+			}
+			
+			if (eleccion < 1 || eleccion > 9) {
+				System.out.println("Ponga un valor valido!");
+				return;
+			}
+			
+			Gimnasio liderADesafiar = null;
+			
+			
+			if (eleccion == 9) {
+				return;
+			}
+			else if (eleccion == 1 ) {
+				liderADesafiar = gimnasios.get(0);
+				if (j.combateGimnasio(liderADesafiar)) { //Entra aqui en caso de ganar
+					int indexLider = gimnasios.indexOf(liderADesafiar);
+					
+					if (liderADesafiar.getEstado().equals("Sin derrotar")) { //Añadirle una medalla al jugador en caso de que el gimnasio no se haya derrotado previamente
+						j.agregarMedallas(gimnasios.get(0).getLider());
+					}
+					
+					
+					liderADesafiar.setEstado("Derrotado");
+					gimnasios.set(indexLider, liderADesafiar);
+				} else {
+					
 				}
+			} else {
+				int contadorLider = 2;
+				boolean puedeContinuar = false;
 				
-				if (!puedeContinuar) {
-					System.out.println("Debes derrotar a los demas gimnasios primero!");
-					break;
-				}
-				else {
-					puedeContinuar = false;
-				}
-				
-				if (contadorLider == eleccion) {
-					liderADesafiar = gimnasios.get(eleccion-1);
-					if (j.combateGimnasio(liderADesafiar)) { //Entra aqui en caso de ganar
-						int indexLider = gimnasios.indexOf(liderADesafiar);
-						
-						if (liderADesafiar.getEstado().equals("Sin derrotar")) { //Añadirle una medalla al jugador en caso de que el gimnasio no se haya derrotado previamente
-							j.agregarMedallas(gimnasios.get(indexLider).getLider());
+				for (Gimnasio g : gimnasios) {
+					if (g.getEstado().equals("Derrotado")) {
+						puedeContinuar = true;
+					}
+					
+					if (!puedeContinuar) {
+						System.out.println("Debes derrotar a los demas gimnasios primero!");
+						break;
+					}
+					else {
+						contadorLider++;
+					}
+					
+					if (contadorLider == eleccion) {
+						liderADesafiar = gimnasios.get(eleccion-1);
+						if (j.combateGimnasio(liderADesafiar)) { //Entra aqui en caso de ganar
+							int indexLider = gimnasios.indexOf(liderADesafiar);
+							
+							if (liderADesafiar.getEstado().equals("Sin derrotar")) { //Añadirle una medalla al jugador en caso de que el gimnasio no se haya derrotado previamente
+								j.agregarMedallas(gimnasios.get(indexLider).getLider());
+							}
+							
+							liderADesafiar.setEstado("Derrotado");
+							gimnasios.set(indexLider, liderADesafiar);
+						} else {
+							
 						}
-						
-						liderADesafiar.setEstado("Derrotado");
-						gimnasios.set(indexLider, liderADesafiar);
-					} else {
-						
 					}
 				}
 			}
 		}
 	}
+	
 	public static void reescribirGimnasio(Jugador j) {
 		for (Gimnasio g : gimnasios) {
 			for (String b : j.getCantMedallasLista()) {
@@ -520,6 +557,77 @@ public class Main {
 					}
 				}
 			}
+		}
+	}
+	
+	public static void retarAltoMando(Jugador j) {
+		if (j.getIntCantMedallas() != 8) {
+			System.out.println();
+			System.out.println("Aun no has derrotado a todos los lideres de gimnasio.");
+			System.out.println("Volviendo al menu..");
+			System.out.println();
+		}
+		else {
+			int contadorAltoMando = 0;
+			boolean seguirCombatiendo = true;
+			int eleccion = 0;
+			Scanner input = new Scanner(System.in);
+			
+			if (!j.chequearPokemonVivo()) {
+				System.out.println("¡Cura a tus pokemones antes de enfrentar al alto mando!");
+				System.out.println();
+				seguirCombatiendo = false;
+			} else {
+				System.out.println("Iniciando desafio alto mando!");
+				
+				while (seguirCombatiendo) {
+					if (contadorAltoMando == altosMandos.size()+1) {
+						System.out.println("Felicidades, has derrotado al alto mando. Eres todo un campeon! ");
+						System.out.println("Volviendo al menu..");
+						System.out.println();
+						break;
+					}
+					
+					
+					AltoMando altoMandoDesafiado = altosMandos.get(contadorAltoMando);
+					
+					System.out.println();
+					System.out.println("1) Iniciar combate. ");
+					System.out.println("2) Curar pokemones. ");
+					System.out.println("3) Salir. ");
+					System.out.print("Eleccion: ");
+					eleccion = -1;
+					
+					try {
+		        		eleccion = input.nextInt();
+					} catch (Exception e) {
+						System.out.println();
+						input.nextLine();
+					}
+					
+					switch (eleccion) {
+					case 1:
+						if (j.combateAltoMando(altoMandoDesafiado)) {
+							contadorAltoMando++;
+						} else {
+							seguirCombatiendo = false;
+						}
+						break;
+					
+					case 2:
+						j.curarPokemones();
+						break;
+					
+					case 3:
+						seguirCombatiendo = false;
+						break;
+					default:
+						System.out.println("Opcion invalida.");
+						break;
+					}
+				}
+			}
+			
 		}
 	}
 }

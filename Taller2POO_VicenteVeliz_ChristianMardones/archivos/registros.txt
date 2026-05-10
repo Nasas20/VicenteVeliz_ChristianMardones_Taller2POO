@@ -1,4 +1,8 @@
-Chente;EmmaLaArdillaRabiosa;
+Chente;EmmaLaArdillaRabiosa;MartinNegro;Ferran;Branco;Remi;Pruno;Dani;Maxi;
 Trevenant;Vivo
 Steelix;Vivo
 Lucario;Vivo
+Tyranitar;Vivo
+Decidueye;Vivo
+Snorlax;Vivo
+Slugma;pc
