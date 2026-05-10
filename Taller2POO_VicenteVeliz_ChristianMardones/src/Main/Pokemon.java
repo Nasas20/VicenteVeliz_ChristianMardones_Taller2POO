@@ -12,7 +12,7 @@ public class Pokemon {
 	private int defensaEspecial;
 	private int velocidad;
 	private String tipo;
-	private String estado = null;
+	private String estado = "Vivo";
 
 
 	public Pokemon(String nombrePokemon, String habitat, double aparicion, int vida, int ataque, int defensa,int ataqueEspecial, int defensaEspecial, int velocidad, String tipo) {
@@ -87,6 +87,10 @@ public class Pokemon {
 
 	public String getTipo() {
 		return tipo;
+	}
+	
+	public int getEstadisticas() {
+		return getVida() + getAtaque() + getDefensa() + getAtaqueEspecial() + getDefensaEspecial() + getVelocidad();
 	}
 	
 	
