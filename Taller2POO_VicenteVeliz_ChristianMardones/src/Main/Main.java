@@ -513,14 +513,13 @@ public class Main {
 				for (Gimnasio g : gimnasios) {
 					if (g.getEstado().equals("Derrotado")) {
 						puedeContinuar = true;
+					} else {
+						puedeContinuar = false;
 					}
 					
 					if (!puedeContinuar) {
 						System.out.println("Debes derrotar a los demas gimnasios primero!");
 						break;
-					}
-					else {
-						contadorLider++;
 					}
 					
 					if (contadorLider == eleccion) {
@@ -538,6 +537,7 @@ public class Main {
 							
 						}
 					}
+					contadorLider++;
 				}
 			}
 		}
