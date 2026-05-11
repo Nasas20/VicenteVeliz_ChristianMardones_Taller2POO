@@ -1,4 +1,7 @@
-# 👥 Integrantes del Proyecto
+# Proyecto
+
+## Descripcion:
+Este es un juego de simulación basado en la franquicia Pokémon desarrollado como parte de un taller en el curso de Programación Orientada a Objetos (POO). El juego simula el proceso de capturar, entrenar y combatir con Pokémon, siguiendo las reglas y características tradicionales de la serie.
 
 ## 👨‍💻 Integrante 1
 - **Nombre:** Vicente Veliz  
