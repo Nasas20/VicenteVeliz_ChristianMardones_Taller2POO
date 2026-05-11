@@ -1,3 +1,5 @@
+//Vicente Alonso Veliz Veliz | Rut : 22.012.230-1 | Carrera: ICCI
+//Christian Jovanny Mardones Lopez | Rut : 22.026.428-9 | Carrera: ICCI
 package Main;
 
 import java.io.BufferedWriter;
